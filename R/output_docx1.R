@@ -1,40 +1,4 @@
-
-#' @title output_docx
-#'
-#' @description A simple function that helps to output tables in .docx
-#'
-#' @param ... One or more data.frames
-#'
-#' @param gap Separator between each table, the default is a SPACE
-#'
-#' @param filename File name of the .docx
-#'
-#' @param captions Title for each table
-#'
-#' @param digits Number of digits shown in the table, the default is 2
-#'
-#'
-#' @examples
-#'
-#' output_docx(cars,iris)
-#'
-#'
-#' @importFrom cli cli_alert_success
-#'
-#' @importFrom purrr map map2
-#'
-#' @importFrom flextable set_flextable_defaults flextable body_add_flextable set_caption
-#'
-#' @import officer
-#'
-#' @import magrittr
-#'
-#'
-#' @export
-
-
-
-output_docx <- function(...,gap=" ",filename="output.docx",captions=NULL,digits=2){
+output_docx1 <- function(lists,gap=" ",filename="output.docx",captions=NULL,digits=2){
 
 
   set_flextable_defaults(digits = digits,font.family = "Times New Roman",font.size=10)
@@ -44,7 +8,7 @@ output_docx <- function(...,gap=" ",filename="output.docx",captions=NULL,digits=
     stop("Wrong file extension,please set file name as xxxx.docx")
   }
 
-  dfs <- map(list(...),class) %>% unlist()
+  dfs <- map(lists,class) %>% unlist()
 
   if (all(unique(dfs)%in%c("tbl_df","tbl","data.frame","data.table"))==FALSE){
     stop("the rendered objects include non-data.frame.Please check the input.")
@@ -52,11 +16,14 @@ output_docx <- function(...,gap=" ",filename="output.docx",captions=NULL,digits=
 
 
   if (is.null(captions)){
-    tables_list <- list(...) %>% map(.,flextable)
-  }else if(is.null(captions)!=TRUE&length(list(...))==length(captions)){
-    tables_list <- list(...) %>% map(.,flextable) %>% map2(.,captions,function(x,y)set_caption(x,caption = y))
-  }else if (is.null(captions)!=TRUE&length(list(...))!=length(captions)){
+    tables_list <- lists %>% map(.,flextable)
+  }else{
+    str_after <- strsplit(captions,";") %>% unlist()
+    if (length(str_after)==length(lists)){
+    tables_list <- lists %>% map(.,flextable) %>% map2(.,str_after,function(x,y)set_caption(x,caption = y))
+    }else{
     stop("The number of cations does not match the number of tables.")
+    }
   }
 
   if (length(tables_list)==1){
