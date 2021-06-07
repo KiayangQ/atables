@@ -43,12 +43,12 @@ output_tables <- function() {
         choices = c(1,2,3,4,5)
       ),
       selectInput(
-        inputId = "Themes", label = "Select the theme",
+        inputId = "Themes", label = "Select a theme:",
         selected = "theme_booktabs",
         choices = c("theme_booktabs","theme_alafoli","theme_vader","theme_box","theme_vanilla","theme_zebra","theme_tron_legacy","theme_tron")
       ),
-      textInput("filename",label="File name",value="output.docx"),
-      radioButtons("caps","Input captions(use semicolon as separator)",choices=c("Yes"="yes","No"="no"),selected="no"),
+      textInput("filename",label="File name:",value="output.docx"),
+      radioButtons("caps","Input captions(semicolon as separator):",choices=c("Yes"="yes","No"="no"),selected="no"),
       conditionalPanel(
         condition = "input.caps == 'yes'",
         textInput("captions",label="Captions",value="")
