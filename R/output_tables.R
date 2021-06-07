@@ -1,15 +1,33 @@
-library(shiny)
-library(miniUI)
-library(purrr)
-library(officer)
-library(magrittr)
-library(flextable)
-library(cli)
 
-temp <-  ls()[sapply(ls(),function(x)any(class(get(x))%in%c("data.frame")))]
+#' @title output tables
+#'
+#' @description A simple function that helps to output tables in .docx
+#'
+#'
+#'
+#' @importFrom cli cli_alert_success
+#'
+#' @importFrom purrr map map2
+#'
+#' @importFrom flextable set_flextable_defaults flextable body_add_flextable set_caption
+#'
+#' @import officer
+#'
+#' @import magrittr
+#'
+#' @import shiny
+#'
+#' @import miniUI
+#'
+
+
 
 output_tables <- function() {
-
+  if (length(ls(envir = .GlobalEnv))==0){
+    stop("No object was detected on global environment")
+  }else{
+    temp <-  ls(envir = .GlobalEnv)[sapply(ls(envir = .GlobalEnv),function(x)any(class(get(x))%in%c("data.frame")))]
+  }
   ui <- miniPage(
     gadgetTitleBar("Output tables to a .docx file"),
     miniContentPanel(
@@ -24,8 +42,13 @@ output_tables <- function() {
         selected = 2,
         choices = c(1,2,3,4,5)
       ),
+      selectInput(
+        inputId = "Themes", label = "Select the theme",
+        selected = "theme_booktabs",
+        choices = c("theme_booktabs","theme_alafoli","theme_vader","theme_box","theme_vanilla","theme_zebra","theme_tron_legacy","theme_tron")
+      ),
       textInput("filename",label="File name",value="output.docx"),
-      radioButtons("caps","Input captions?",choices=c("Yes"="yes","No"="no"),selected="no"),
+      radioButtons("caps","Input captions(use semicolon as separator)",choices=c("Yes"="yes","No"="no"),selected="no"),
       conditionalPanel(
         condition = "input.caps == 'yes'",
         textInput("captions",label="Captions",value="")
@@ -40,9 +63,9 @@ output_tables <- function() {
     observeEvent(input$done,{
       tables <- map(input$tableName,function(x)get(x))
       if (input$caps=='yes'){
-          output_docx1(tables,filename = input$filename,captions = input$captions,digits = input$Nums)
+          output_docx1(tables,filename = input$filename,captions = input$captions,digits = as.numeric(input$Nums),theme=input$Themes)
       }else{
-        output_docx1(tables,filename = input$filename,digits = input$Nums)
+        output_docx1(tables,filename = input$filename,digits = as.numeric(input$Nums),theme=input$Themes)
         }
       stopApp()
     })

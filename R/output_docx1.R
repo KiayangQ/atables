@@ -1,7 +1,7 @@
-output_docx1 <- function(lists,gap=" ",filename="output.docx",captions=NULL,digits=2){
+output_docx1 <- function(lists,gap=" ",filename="output.docx",captions=NULL,digits=2,theme="theme_booktabs"){
 
 
-  set_flextable_defaults(digits = digits,font.family = "Times New Roman",font.size=10)
+  set_flextable_defaults(digits = digits,font.family = "Times New Roman",font.size=10,theme_fun=theme)
 
   # defensive:
   if (grepl("\\.docx",filename)==FALSE){
@@ -39,5 +39,5 @@ output_docx1 <- function(lists,gap=" ",filename="output.docx",captions=NULL,digi
   }
   print(trans_tables,target=filename)
   filename <- paste0(getwd(),"/",filename)
-  cli_alert_success("{length(tables_list)} tables have been rendered to {filename}")
+  cli_alert_success("rendered {length(tables_list)} tables to {filename}")
 }
