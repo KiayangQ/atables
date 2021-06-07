@@ -1,8 +1,16 @@
-output_docx1 <- function(lists,gap=" ",filename="output.docx",captions=NULL,digits=2,theme="theme_booktabs"){
+output_docx1 <- function(lists,gap=" ",filename="output.docx",captions=NULL,digits=2,theme="theme_booktabs",row_com=FALSE){
 
 
-  set_flextable_defaults(digits = digits,font.family = "Times New Roman",font.size=10,theme_fun=theme)
+  set_flextable_defaults(font.family = "Times New Roman",font.size=10,theme_fun=theme)
 
+  lists <- map(lists,function(x)mutate_if(x,is.numeric, round, digits))
+
+  if(row_com!=FALSE){
+    lists <- map(lists,function(x)rownames_to_column(x,"row_names"))
+  }
+# TWO FUNCTIONS NEEDED:
+  # DETECT ROWNAMES AS THE FIRST ROW
+  # ROUND UP
   # defensive:
   if (grepl("\\.docx",filename)==FALSE){
     stop("Wrong file extension,please set file name as xxxx.docx")

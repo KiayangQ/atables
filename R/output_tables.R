@@ -11,6 +11,10 @@
 #'
 #' @importFrom flextable set_flextable_defaults flextable body_add_flextable set_caption
 #'
+#' @importFrom dplyr mutate_if
+#'
+#' @importFrom tibble rownames_to_column
+#'
 #' @import officer
 #'
 #' @import magrittr
@@ -18,6 +22,8 @@
 #' @import shiny
 #'
 #' @import miniUI
+#'
+#'
 #'
 
 
@@ -49,6 +55,7 @@ output_tables <- function() {
       ),
       textInput("filename",label="File name:",value="output.docx"),
       radioButtons("caps","Input captions:",choices=c("Yes"="yes","No"="no"),selected="no"),
+      radioButtons("row_names","Include rownames:",choices=c("Yes"="yes","No"="no"),selected="no"),
       conditionalPanel(
         condition = "input.caps == 'yes'",
         textInput("captions",label="Captions(semicolon as separator)",value="")
@@ -62,11 +69,15 @@ output_tables <- function() {
     # When the Done button is clicked, return a value
     observeEvent(input$done,{
       tables <- map(input$tableName,function(x)get(x))
-      if (input$caps=='yes'){
-          output_docx1(tables,filename = input$filename,captions = input$captions,digits = as.numeric(input$Nums),theme=input$Themes)
-      }else{
+      if (input$caps=='yes'& input$row_names=='yes'){
+          output_docx1(tables,filename = input$filename,captions = input$captions,digits = as.numeric(input$Nums),theme=input$Themes,row_com=TRUE)
+      }else if(input$caps=='no'& input$row_names=='no'){
         output_docx1(tables,filename = input$filename,digits = as.numeric(input$Nums),theme=input$Themes)
-        }
+      }else if(input$caps=='yes'& input$row_names=='no'){
+        output_docx1(tables,filename = input$filename,captions = input$captions,digits = as.numeric(input$Nums),theme=input$Themes)
+      }else{
+        output_docx1(tables,filename = input$filename,digits = as.numeric(input$Nums),theme=input$Themes,row_com=TRUE)
+      }
       stopApp()
     })
   }

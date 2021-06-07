@@ -8,6 +8,8 @@ Description: This package helps to easily output multiple tables (data.frames) t
 Depends: R (>= 3.6.0)
 Imports: 
   flextable,
+  dplyr,
+  tibble,
   magrittr,
   officer,
   purrr,
