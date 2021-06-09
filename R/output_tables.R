@@ -39,7 +39,7 @@ output_tables <- function() {
     miniContentPanel(
       # Define layout, inputs, outputs
       selectInput(
-        inputId = "tableName", label = "Select Table:",
+        inputId = "tableName", label = "Select tables:",
         selected = NULL, multiple = TRUE,
         choices = c(temp)
       ),
