@@ -1,6 +1,6 @@
 output_docx1 <- function(lists,gap=" ",filename="output.docx",captions=NULL,digits=2,theme="theme_booktabs",row_com=FALSE){
 
-
+ # default parameters
   set_flextable_defaults(font.family = "Times New Roman",font.size=10,theme_fun=theme)
 
   lists <- map(lists,function(x)mutate_if(x,is.numeric, round, digits))
@@ -8,18 +8,16 @@ output_docx1 <- function(lists,gap=" ",filename="output.docx",captions=NULL,digi
   if(row_com!=FALSE){
     lists <- map(lists,function(x)rownames_to_column(x,"row_names"))
   }
-# TWO FUNCTIONS NEEDED:
-  # DETECT ROWNAMES AS THE FIRST ROW
-  # ROUND UP
+
   # defensive:
   if (grepl("\\.docx",filename)==FALSE){
     stop("Wrong file extension,please set file name as xxxx.docx")
   }
 
-  dfs <- map(lists,class) %>% unlist()
+  dfs <- map(lists,class) %>% map(.,function(x){any(x=="data.frame")})
 
-  if (all(unique(dfs)%in%c("tbl_df","tbl","data.frame","data.table"))==FALSE){
-    stop("the rendered objects include non-data.frame.Please check the input.")
+  if (any(unlist(dfs)==FALSE)){
+    stop("The rendered objects include non-data.frame.Please check the input.")
   }
 
 
