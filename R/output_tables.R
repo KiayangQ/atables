@@ -30,7 +30,7 @@
 
 output_tables <- function() {
   if (length(ls(envir = .GlobalEnv))==0){
-    stop("No object was detected on global environment")
+    stop("The global environment is empty")
   }else{
     temp <-  ls(envir = .GlobalEnv)[sapply(ls(envir = .GlobalEnv),function(x)any(class(get(x))%in%c("data.frame")))]
   }
