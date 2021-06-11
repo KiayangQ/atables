@@ -14,12 +14,6 @@ output_docx1 <- function(lists,gap=" ",filename="output.docx",captions=NULL,digi
     stop("Wrong file extension,please set file name as xxxx.docx")
   }
 
-  dfs <- map(lists,class) %>% map(.,function(x){any(x=="data.frame")})
-
-  if (any(unlist(dfs)==FALSE)){
-    stop("The rendered objects include non-data.frame.Please check the input.")
-  }
-
 
   if (is.null(captions)){
     tables_list <- lists %>% map(.,flextable)

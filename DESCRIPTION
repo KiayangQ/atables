@@ -6,7 +6,7 @@ Author: K.Q
 Maintainer: K.Q <qkylove8@gmail.com>
 Description: This package helps to easily output multiple tables (data.frames) to a .docx file.
 Depends: R (>= 3.6.0)
-Imports: 
+Imports:
   flextable,
   dplyr,
   tibble,
@@ -16,7 +16,7 @@ Imports:
   cli,
   shiny,
   miniUI
-License: MIT + file LICENSE
+License: GPL-3 + file LICENSE
 Encoding: UTF-8
 LazyData: true
 RoxygenNote: 6.1.1
