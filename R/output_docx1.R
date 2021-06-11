@@ -3,7 +3,7 @@ output_docx1 <- function(lists,gap=" ",filename="output.docx",captions=NULL,digi
  # default parameters
   set_flextable_defaults(font.family = "Times New Roman",font.size=10,theme_fun=theme)
 
-  lists <- map(lists,function(x)mutate_if(x,is.numeric, round, digits))
+  lists <- map(lists,function(x)mutate(x,across(where(is.numeric), round_tidy, digits)))
 
   if(row_com!=FALSE){
     lists <- map(lists,function(x)rownames_to_column(x,"row_names"))

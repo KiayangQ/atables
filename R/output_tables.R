@@ -11,9 +11,12 @@
 #'
 #' @importFrom flextable set_flextable_defaults flextable body_add_flextable set_caption
 #'
-#' @importFrom dplyr mutate_if
+#' @importFrom dplyr across mutate
+#'
 #'
 #' @importFrom tibble rownames_to_column
+#'
+#' @importFrom finalfit round_tidy
 #'
 #' @import officer
 #'
